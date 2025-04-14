@@ -6,4 +6,5 @@ public enum FigureType {
     TREE,
     HERBIVORE,
     PREDATOR;
+
 }

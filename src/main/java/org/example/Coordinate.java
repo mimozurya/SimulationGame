@@ -11,6 +11,7 @@ public class Coordinate {
         this.height = height;
     }
 
+
     @Override
     public String toString() {
         return "Coordinate{" +

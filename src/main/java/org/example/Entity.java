@@ -8,4 +8,5 @@ public abstract class Entity {
         this.figureType = figureType;
         this.coordinate = coordinate;
     }
+
 }

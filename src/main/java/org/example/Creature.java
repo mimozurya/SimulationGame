@@ -12,4 +12,5 @@ public abstract class Creature extends Entity {
     public String toString() {
         return figureType.toString() + " " + coordinate.width + " " + coordinate.height + " " + speed + " " + health;
     }
+
 }

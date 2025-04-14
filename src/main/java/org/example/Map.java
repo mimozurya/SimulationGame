@@ -25,6 +25,7 @@ public class Map {
         for (Entity entity : entities.values()) {
             emojiList.add(getEmojiFromString(entity.figureType.toString()));
         }
+        System.out.println(emojiList);
     }
 
     private String getEmojiFromString(String emojiChar) {
