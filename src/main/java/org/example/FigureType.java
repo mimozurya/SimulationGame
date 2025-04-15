@@ -5,6 +5,6 @@ public enum FigureType {
     ROCK,
     TREE,
     HERBIVORE,
-    PREDATOR;
-
+    PREDATOR,
+    EMPTY_CELL;
 }

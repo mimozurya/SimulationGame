@@ -6,4 +6,7 @@ public class Herbivore extends Creature {
         super(figureType, coordinate);
     }
 
+    // makeMove()
+    // findFood ()
+    // eatFood ()
 }
