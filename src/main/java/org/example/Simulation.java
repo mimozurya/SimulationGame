@@ -6,11 +6,24 @@ public class Simulation {
         map.generateMap();
 
         for (Entity entity : map.entities.values()) {
-            if (entity.figureType == FigureType.HERBIVORE) {
-                Creature creature = (Creature) entity;
-                creature.makeMove(map, FigureType.GRASS);
+            if (entity instanceof Creature creature) {
+                creature.makeMove(map);
             }
         }
+        map.displayOnTheTerminal();
+
+//        while (true) {
+//            for (Entity entity : map.entities.values()) {
+//                if (entity instanceof Creature creature) {
+//                    creature.makeMove(map);
+//                }
+//            }
+//            map.displayOnTheTerminal();
+//
+//            if (map.makeNextTurn()) {
+//                System.out.println("Да, он может сделать следующий ход");
+//            }
+//        }
     }
 
     // карта

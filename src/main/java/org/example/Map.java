@@ -19,7 +19,7 @@ public class Map {
         displayOnTheTerminal();
     }
 
-    private void displayOnTheTerminal() {
+    public void displayOnTheTerminal() {
         StringBuilder line = new StringBuilder();
 
         for (int height = 0; height < HEIGHT_MAP; height++) {
@@ -30,6 +30,8 @@ public class Map {
             }
             System.out.println(line.toString());
         }
+        System.out.println("------------------");
+
     }
 
     private String getEmojiFromString(FigureType figureType) {
@@ -37,9 +39,9 @@ public class Map {
             case FigureType.PREDATOR -> "\uD83D\uDE08";
             case FigureType.TREE -> "\uD83C\uDF33";
             case FigureType.GRASS -> "\uD83C\uDF3F";
-            case FigureType.ROCK -> "\uD83E\uDEA8";
+            case FigureType.ROCK -> "\uD83D\uDDFB";
             case FigureType.HERBIVORE -> "\uD83D\uDC04";
-            default -> "✅";
+            default -> "\uD83D\uDFE9";
         };
     }
 
@@ -52,7 +54,7 @@ public class Map {
         }
     }
 
-    private void setEntity(Coordinate coordinate, int idTypeEntity) {
+    public void setEntity(Coordinate coordinate, int idTypeEntity) {
         switch (idTypeEntity) {
             case 0:
                 entities.put(coordinate,
@@ -83,6 +85,11 @@ public class Map {
 
     public Entity getEntity(Coordinate coordinate) {
         return entities.get(coordinate);
+    }
+
+    public void createEmptyCell (Coordinate coordinate) {
+        entities.put(coordinate,
+                new EmptyCell(FigureType.EMPTY_CELL, coordinate));
     }
 
     public FigureType getFigureType(Coordinate coordinate) {
@@ -122,7 +129,6 @@ public class Map {
         while (!queue.isEmpty()) {
             List<Coordinate> currentPath = queue.poll();
             Coordinate currentPos = currentPath.getLast();
-//            Coordinate currentPos = currentPath.get(currentPath.size() - 1);
 
             if (currentPos.getWidth() == end.getWidth() &&
                     currentPos.getHeight() == end.getHeight()) {
@@ -182,5 +188,11 @@ public class Map {
         }
 
         return null;
+    }
+
+    public boolean makeNextTurn () {
+        System.out.println("Делать следующий ход? (Y/N)");
+        String answer = scanner.nextLine().toUpperCase();
+        return answer.equals("Y");
     }
 }

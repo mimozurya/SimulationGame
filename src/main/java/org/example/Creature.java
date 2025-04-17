@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Creature extends Entity {
@@ -11,11 +12,7 @@ public abstract class Creature extends Entity {
         super(figureType, coordinate);
     }
 
-    protected void makeMove(Map map, FigureType figureTypeEnemy) {
-        Coordinate desiredCell = map.findDesiredCell(coordinate, figureTypeEnemy);
-        System.out.println(coordinate + " " + desiredCell);
-        System.out.println(map.findShortestPath(coordinate, desiredCell) + "путь");
-    }
+    protected abstract void makeMove(Map map);
 
     @Override
     public String toString() {
