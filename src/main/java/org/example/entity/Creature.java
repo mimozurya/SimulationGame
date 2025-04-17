@@ -11,8 +11,4 @@ public abstract class Creature extends Entity {
 
     public abstract void makeMove(GameMap gameMap);
 
-    @Override
-    public String toString() {
-        return figureType.toString() + " " + coordinate.width + " " + coordinate.height;
-    }
 }

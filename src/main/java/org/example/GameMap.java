@@ -7,23 +7,22 @@ import java.util.*;
 public class GameMap {
     static Map<Coordinate, Entity> entities = new HashMap<>();
     private final Random random = new Random();
-    private final Scanner scanner = new Scanner(System.in);
-    public static int WIDTH_MAP;
-    public static int HEIGHT_MAP;
+    private static int mapWidth;
+    private static int mapHeight;
+    private final int[][] directions = {
+            {-1, 0}, {1, 0}, {0, -1}, {0, 1},
+            {-1, -1}, {-1, 1}, {1, -1}, {1, 1},
+    };
 
     public void generateMap() {
-        System.out.println("Enter the map width ( --- ): ");
-        WIDTH_MAP = scanner.nextInt();
-        System.out.println("Enter the map height ( | ): ");
-        HEIGHT_MAP = scanner.nextInt();
-
-        setupMapEntities();
+        Render.inputMapSize();
+        initEntities();
         Render.displayOnTheTerminal();
     }
 
-    private void setupMapEntities() {
-        for (int width = 0; width < WIDTH_MAP; width++) {
-            for (int height = 0; height < HEIGHT_MAP; height++) {
+    private void initEntities() {
+        for (int width = 0; width < mapWidth; width++) {
+            for (int height = 0; height < mapHeight; height++) {
                 Coordinate coordinate = new Coordinate(width, height);
                 setEntity(coordinate, random.nextInt(FigureType.values().length));
             }
@@ -59,6 +58,22 @@ public class GameMap {
         }
     }
 
+    public static int getMapWidth() {
+        return mapWidth;
+    }
+
+    public static int getMapHeight() {
+        return mapHeight;
+    }
+
+    public static void setMapWidth(int mapWidth) {
+        GameMap.mapWidth = mapWidth;
+    }
+
+    public static void setMapHeight(int mapHeight) {
+        GameMap.mapHeight = mapHeight;
+    }
+
     public Entity getEntity(Coordinate coordinate) {
         return entities.get(coordinate);
     }
@@ -73,10 +88,10 @@ public class GameMap {
     }
 
     private int[][] getGridBarrier() {
-        int[][] grid = new int[HEIGHT_MAP][WIDTH_MAP];
+        int[][] grid = new int[mapHeight][mapWidth];
 
-        for (int height = 0; height < HEIGHT_MAP; height++) {
-            for (int width = 0; width < WIDTH_MAP; width++) {
+        for (int height = 0; height < mapHeight; height++) {
+            for (int width = 0; width < mapWidth; width++) {
                 Coordinate coordinate = new Coordinate(width, height);
                 FigureType figureTypeEntity = entities.get(coordinate).figureType;
 
@@ -97,21 +112,19 @@ public class GameMap {
         Queue<List<Coordinate>> queue = new LinkedList<>();
         queue.add(Collections.singletonList(start));
 
-        boolean[][] visited = new boolean[WIDTH_MAP][HEIGHT_MAP];
+        boolean[][] visited = new boolean[mapWidth][mapHeight];
         visited[start.getWidth()][start.getHeight()] = true;
-
-        int[][] directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
 
         while (!queue.isEmpty()) {
             List<Coordinate> currentPath = queue.poll();
-            Coordinate currentPos = currentPath.getLast();
+            Coordinate currentPosition = currentPath.getLast();
 
-            for (int[] direction : directions) {
-                int newWidth = currentPos.getWidth() + direction[0];
-                int newHeight = currentPos.getHeight() + direction[1];
+            for (int i = 0; i < 4; i++) {
+                int newWidth = currentPosition.getWidth() + directions[i][0];
+                int newHeight = currentPosition.getHeight() + directions[i][1];
 
                 if (newWidth >= 0 && newHeight >= 0
-                        && newWidth < WIDTH_MAP && newHeight < HEIGHT_MAP
+                        && newWidth < mapWidth && newHeight < mapHeight
                         && grid[newHeight][newWidth] == 0
                         && !visited[newWidth][newHeight]) {
 
@@ -122,8 +135,8 @@ public class GameMap {
                 }
             }
 
-            if (currentPos.getWidth() == end.getWidth() &&
-                    currentPos.getHeight() == end.getHeight()) {
+            if (currentPosition.getWidth() == end.getWidth() &&
+                    currentPosition.getHeight() == end.getHeight()) {
                 return currentPath;
             }
         }
@@ -135,11 +148,6 @@ public class GameMap {
         Queue<Coordinate> queue = new LinkedList<>();
         Set<Coordinate> visited = new HashSet<>();
 
-        int[][] directions = {
-                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
-                {-1, -1}, {-1, 1}, {1, -1}, {1, 1},
-        };
-
         queue.add(start);
         visited.add(start);
 
@@ -147,7 +155,7 @@ public class GameMap {
             Coordinate current = queue.poll();
             Entity currentEntity = getEntity(current);
 
-            if (currentEntity != null && getFigureType(currentEntity.coordinate) == figureTypeEnemy) {
+            if (currentEntity != null && getFigureType(currentEntity.getCoordinate()) == figureTypeEnemy) {
                 return current;
             }
 

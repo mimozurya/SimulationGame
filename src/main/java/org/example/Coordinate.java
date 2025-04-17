@@ -3,8 +3,8 @@ package org.example;
 import java.util.Objects;
 
 public class Coordinate {
-    public int width;
-    public int height;
+    private final int width;
+    private final int height;
 
     public Coordinate(int width, int height) {
         this.width = width;
@@ -17,14 +17,6 @@ public class Coordinate {
 
     public int getHeight() {
         return height;
-    }
-
-    @Override
-    public String toString() {
-        return "Coordinate{" +
-                "width=" + width +
-                ", height=" + height +
-                '}';
     }
 
     @Override
