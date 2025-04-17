@@ -1,13 +1,15 @@
 package org.example;
 
+import org.example.entity.*;
+
 import java.util.*;
 
-public class Map {
-    HashMap<Coordinate, Entity> entities = new HashMap<>();
+public class GameMap {
+    static Map<Coordinate, Entity> entities = new HashMap<>();
     private final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
-    private int WIDTH_MAP;
-    private int HEIGHT_MAP;
+    public static int WIDTH_MAP;
+    public static int HEIGHT_MAP;
 
     public void generateMap() {
         System.out.println("Enter the map width ( --- ): ");
@@ -16,33 +18,7 @@ public class Map {
         HEIGHT_MAP = scanner.nextInt();
 
         setupMapEntities();
-        displayOnTheTerminal();
-    }
-
-    public void displayOnTheTerminal() {
-        StringBuilder line = new StringBuilder();
-
-        for (int height = 0; height < HEIGHT_MAP; height++) {
-            line.setLength(0);
-            for (int width = 0; width < WIDTH_MAP; width++) {
-                Coordinate coordinate = new Coordinate(width, height);
-                line.append(getEmojiFromString(entities.get(coordinate).figureType));
-            }
-            System.out.println(line.toString());
-        }
-        System.out.println("------------------");
-
-    }
-
-    private String getEmojiFromString(FigureType figureType) {
-        return switch (figureType) {
-            case FigureType.PREDATOR -> "\uD83D\uDE08";
-            case FigureType.TREE -> "\uD83C\uDF33";
-            case FigureType.GRASS -> "\uD83C\uDF3F";
-            case FigureType.ROCK -> "\uD83D\uDDFB";
-            case FigureType.HERBIVORE -> "\uD83D\uDC04";
-            default -> "\uD83D\uDFE9";
-        };
+        Render.displayOnTheTerminal();
     }
 
     private void setupMapEntities() {
@@ -130,18 +106,13 @@ public class Map {
             List<Coordinate> currentPath = queue.poll();
             Coordinate currentPos = currentPath.getLast();
 
-            if (currentPos.getWidth() == end.getWidth() &&
-                    currentPos.getHeight() == end.getHeight()) {
-                return currentPath;
-            }
-
             for (int[] direction : directions) {
                 int newWidth = currentPos.getWidth() + direction[0];
                 int newHeight = currentPos.getHeight() + direction[1];
 
                 if (newWidth >= 0 && newHeight >= 0
                         && newWidth < WIDTH_MAP && newHeight < HEIGHT_MAP
-                        && grid[newWidth][newHeight] == 0
+                        && grid[newHeight][newWidth] == 0
                         && !visited[newWidth][newHeight]) {
 
                     visited[newWidth][newHeight] = true;
@@ -149,6 +120,11 @@ public class Map {
                     newPath.add(new Coordinate(newWidth, newHeight));
                     queue.add(newPath);
                 }
+            }
+
+            if (currentPos.getWidth() == end.getWidth() &&
+                    currentPos.getHeight() == end.getHeight()) {
+                return currentPath;
             }
         }
 
@@ -188,11 +164,5 @@ public class Map {
         }
 
         return null;
-    }
-
-    public boolean makeNextTurn () {
-        System.out.println("Делать следующий ход? (Y/N)");
-        String answer = scanner.nextLine().toUpperCase();
-        return answer.equals("Y");
     }
 }

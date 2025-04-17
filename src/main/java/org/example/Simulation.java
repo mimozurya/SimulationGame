@@ -1,41 +1,20 @@
 package org.example;
 
+import org.example.entity.Creature;
+import org.example.entity.Entity;
+
 public class Simulation {
     public void startSimulation() {
-        Map map = new Map();
-        map.generateMap();
+        GameMap gameMap = new GameMap();
+        gameMap.generateMap();
 
-        for (Entity entity : map.entities.values()) {
-            if (entity instanceof Creature creature) {
-                creature.makeMove(map);
+        while (true) {
+            for (Entity entity : GameMap.entities.values()) {
+                if (entity instanceof Creature creature) {
+                    creature.makeMove(gameMap);
+                }
             }
         }
-        map.displayOnTheTerminal();
 
-//        while (true) {
-//            for (Entity entity : map.entities.values()) {
-//                if (entity instanceof Creature creature) {
-//                    creature.makeMove(map);
-//                }
-//            }
-//            map.displayOnTheTerminal();
-//
-//            if (map.makeNextTurn()) {
-//                System.out.println("Да, он может сделать следующий ход");
-//            }
-//        }
     }
-
-    // карта
-    // счетчик ходов
-    // рендерер поля
-    // actions
-
-    // nextTurn()
-    // startSimulation()
-    // pauseSimulation()
-
-    // Actions:
-    // initActions - действия перед стартом симуляции
-    // turnActions - действия каждый ход (передвижение, добавить травы или травоядных)
 }
